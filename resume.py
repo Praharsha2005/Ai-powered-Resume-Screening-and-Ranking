@@ -1,10 +1,11 @@
 import pandas as pd
 import re
 import nltk
+import spacy
+import subprocess
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from pdfminer.high_level import extract_text
@@ -17,8 +18,12 @@ nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
-# Load SpaCy model
-nlp = spacy.load("en_core_web_sm")
+# Ensure the SpaCy model is installed
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
 
 def extract_text_from_pdf(file):
     return extract_text(file)
